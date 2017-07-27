@@ -17,10 +17,19 @@
 
 #include "Hardware.h"
 #include "Arduino.h"
+#include "TwoWire.h"
+#include "BaseProtocol.h"
 
 const uint16_t hopper_threshold = 5;
 
 //#define ENABLE_SERIAL
+
+cmd_result processCommand(uint8_t cmd, uint8_t *data, uint8_t len, uint8_t maxLen) {
+  switch (cmd) {
+    default:
+      return cmd_result(Status::COMMAND_NOT_SUPPORTED);
+  }
+}
 
 void start_display()
 {
@@ -84,6 +93,8 @@ void setup()
   #ifndef ENABLE_SERIAL // Serial reuses the H_sens pin
   pinMode(H_Sens, INPUT);
   #endif
+
+  TwoWireInit(/* useInterrupts */ true, I2C_ADDRESS);
 
   start_display();
 }

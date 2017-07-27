@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 3devo (http://3devo.eu)
+ * Copyright (C) 2015-2017 Erin Tomson <erin@rgba.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Arduino.h"
+#ifndef TWOWIRE_H_
+#define TWOWIRE_H_
 
-static const int H_Led = PIN_A7;
-static const int H_Sens = PIN_A1;
-static const int H_Out = PIN_A0;
+#include <inttypes.h>
 
-static const int EN_Boost = PIN_A3;
-static const int EN_3V3 = PIN_A2;
-static const int RES_Display = PIN_B0;
+void TwoWireUpdate();
+void TwoWireInit(bool useInterrupts, uint8_t initialAddress, uint8_t initialMask = 0x00);
+void TwoWireDeinit();
+void TwoWireSetDeviceAddress(uint8_t address);
+uint8_t TwoWireGetDeviceAddress();
+void TwoWireResetDeviceAddress();
 
-static const int ENC_B = PIN_B1;
-static const int ENC_A = PIN_B2;
-static const int ENC_SW = PIN_A5;
+int TwoWireCallback(uint8_t address, uint8_t *buffer, uint8_t len, uint8_t maxLen);
 
-static const int SCL = PIN_A4;
-static const int SDA = PIN_A6;
-
-static const int LED_ON = HIGH;
-static const int LED_OFF = LOW;
-
-static const int HOPPER_FULL = HIGH;
-static const int HOPPER_EMPTY = LOW;
-
-static const uint8_t I2C_ADDRESS = 8;
+#endif /* TWOWIRE_H_ */
