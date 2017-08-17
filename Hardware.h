@@ -19,6 +19,8 @@
 
 static const int H_Led = PIN_A7;
 static const int H_Sens = PIN_A1;
+static const int H_Sens_ADC_Channel = 1;
+static_assert(analogInputToDigitalPin(H_Sens_ADC_Channel) == H_Sens, "Hopper sensor ADC channel mismatch");
 static const int H_Out = PIN_A0;
 
 static const int EN_Boost = PIN_A3;

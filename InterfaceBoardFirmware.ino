@@ -66,11 +66,11 @@ void measure_hopper()
 {
 #ifndef ENABLE_SERIAL // Serial reuses the H_sens pin
   digitalWrite(H_Led, LED_ON);
-  uint16_t on = analogRead(H_Sens);
+  uint16_t on = analogRead(H_Sens_ADC_Channel);
   // TODO: Delay?
 
   digitalWrite(H_Led, LED_OFF);
-  uint16_t off = analogRead(H_Sens);
+  uint16_t off = analogRead(H_Sens_ADC_Channel);
 
   // Lower reading means more light
   if (on < off && (off - on) > hopper_threshold)
