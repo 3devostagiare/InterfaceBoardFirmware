@@ -19,13 +19,29 @@
 #include "Arduino.h"
 #include "TwoWire.h"
 #include "BaseProtocol.h"
+#include <util/atomic.h>
 
 const uint16_t hopper_threshold = 5;
+uint16_t measurement[2];
 
 //#define ENABLE_SERIAL
 
+struct Commands {
+  enum {
+    GET_LAST_MEASUREMENT = 0x80,
+  };
+};
+
 cmd_result processCommand(uint8_t cmd, uint8_t *data, uint8_t len, uint8_t maxLen) {
   switch (cmd) {
+    case Commands::GET_LAST_MEASUREMENT:
+      if (len != 0 || maxLen < 4)
+        return cmd_result(Status::INVALID_ARGUMENTS);
+      data[0] = measurement[0] >> 8;
+      data[1] = measurement[0];
+      data[2] = measurement[1] >> 8;
+      data[3] = measurement[1];
+      return cmd_result(Status::COMMAND_OK, 4);
     default:
       return cmd_result(Status::COMMAND_NOT_SUPPORTED);
   }
@@ -72,6 +88,12 @@ void measure_hopper()
   digitalWrite(H_Led, LED_OFF);
   delay(10);
   uint16_t off = analogRead(H_Sens_ADC_Channel);
+
+  // Store the raw measurements to be read through I²C
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    measurement[0] = on;
+    measurement[1] = off;
+  }
 
   // Lower reading means more light
   if (on < off && (off - on) > hopper_threshold)
