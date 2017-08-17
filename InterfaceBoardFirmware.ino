@@ -32,15 +32,15 @@ struct Commands {
   };
 };
 
-cmd_result processCommand(uint8_t cmd, uint8_t *data, uint8_t len, uint8_t maxLen) {
+cmd_result processCommand(uint8_t cmd, uint8_t * /*datain*/, uint8_t len, uint8_t *dataout, uint8_t maxLen) {
   switch (cmd) {
     case Commands::GET_LAST_MEASUREMENT:
       if (len != 0 || maxLen < 4)
         return cmd_result(Status::INVALID_ARGUMENTS);
-      data[0] = measurement[0] >> 8;
-      data[1] = measurement[0];
-      data[2] = measurement[1] >> 8;
-      data[3] = measurement[1];
+      dataout[0] = measurement[0] >> 8;
+      dataout[1] = measurement[0];
+      dataout[2] = measurement[1] >> 8;
+      dataout[3] = measurement[1];
       return cmd_result(Status::COMMAND_OK, 4);
     default:
       return cmd_result(Status::COMMAND_NOT_SUPPORTED);
