@@ -1,0 +1,4 @@
+[submodule "hardware/Arduino-3devo"]
+	path = hardware/Arduino-3devo
+	url = https://github.com/3devo/Arduino-3devo.git
+	branch = master
