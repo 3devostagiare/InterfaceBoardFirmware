@@ -2,3 +2,7 @@
 	path = hardware/Arduino-3devo
 	url = https://github.com/3devo/Arduino-3devo.git
 	branch = master
+[submodule "hardware/ATTinyCore"]
+	path = hardware/ATTinyCore
+	url = https://github.com/SpenceKonde/ATTinyCore.git
+	branch = master
