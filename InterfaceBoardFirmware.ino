@@ -21,7 +21,7 @@
 #include "BaseProtocol.h"
 #include <util/atomic.h>
 
-const uint16_t hopper_threshold = 5;
+const uint16_t hopper_threshold = 20;
 uint16_t measurement[2];
 
 //#define ENABLE_SERIAL
