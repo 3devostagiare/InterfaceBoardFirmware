@@ -1,0 +1,11 @@
+*.swp
+preferences.txt
+__vm
+.vs
+Debug
+Release
+*.vcxproj*
+*.sln
+*.o
+*.d
+build
