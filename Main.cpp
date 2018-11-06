@@ -29,6 +29,8 @@ uint16_t measurement[2];
 struct Commands {
   enum {
     GET_LAST_MEASUREMENT = 0x80,
+		GET_ENCODER_DELTA = 0x40,
+		GET_ENCODER_BUTTON = 0x41,
   };
 };
 
