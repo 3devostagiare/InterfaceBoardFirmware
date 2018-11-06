@@ -20,10 +20,11 @@
 #include "TwoWire.h"
 #include "BaseProtocol.h"
 #include <util/atomic.h>
+#include "ButtonEncoder.h"
 
 const uint16_t hopper_threshold = 20;
 uint16_t measurement[2];
-ButtonEncoder encoder(ENC_SW, ENC_A, ENC_B);
+ButtonEncoder<ENC_SW, ENC_A, ENC_B> encoder;
 
 //#define ENABLE_SERIAL
 
@@ -48,7 +49,7 @@ cmd_result processCommand(uint8_t cmd, uint8_t * /*datain*/, uint8_t len, uint8_
       if (len != 0 || maxLen < 2)
         return cmd_result(Status::INVALID_ARGUMENTS);
 			uint16_t returnValue = encoder.process() & 0xFF7F;
-			if (!(on < off && (off - on) > hopper_threshold))
+			if (!(measurement[0] < measurement[1] && (measurement[1] - measurement[0]) > hopper_threshold))
 				returnValue |= 0x0080;
 			dataout[0] = returnValue >> 8;
 			dataout[1] = returnValue;

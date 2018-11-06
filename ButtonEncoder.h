@@ -1,6 +1,7 @@
 #pragma once
 
 #include "util/atomic.h"
+#include "Arduino.h"
 
 /**
  * This class handles events from a rotary encoder with a combined
@@ -92,7 +93,7 @@
 template <uint8_t button_pin, uint8_t pina, uint8_t pinb>
 class ButtonEncoder {
   public:
-		ButtonEncoder{
+		ButtonEncoder() {
       // These have external pullups
       pinMode(button_pin, INPUT_PULLUP /* TEMPORARY with PULLUP! */);
       pinMode(pina, INPUT);
@@ -161,15 +162,16 @@ private:
       uint8_t key = prev_reading << 2 | reading;
       encoder_value += pgm_read_byte(&table[key]);
       prev_reading = reading;
-
-      // When we touch a detent, signal the main loop to process an event
-      // TODO: This might cause race conditions, since TaskScheduler
-      // does not take care of atomicity
-      if (encoder_value % 4 == 0)
-        process_task.restart();
     }
 
     static volatile uint8_t button_presses;
     static uint8_t encoder_last_processed;
     static volatile uint8_t encoder_value;
 };
+
+template <uint8_t button_pin, uint8_t pina, uint8_t pinb>
+uint8_t ButtonEncoder<button_pin, pina, pinb>::encoder_last_processed;
+template <uint8_t button_pin, uint8_t pina, uint8_t pinb>
+volatile uint8_t ButtonEncoder<button_pin, pina, pinb>::encoder_value;
+template <uint8_t button_pin, uint8_t pina, uint8_t pinb>
+volatile uint8_t ButtonEncoder<button_pin, pina, pinb>::button_presses;
