@@ -45,7 +45,7 @@ cmd_result processCommand(uint8_t cmd, uint8_t * /*datain*/, uint8_t len, uint8_
       dataout[3] = measurement[1];
       return cmd_result(Status::COMMAND_OK, 4);
 		case Commands::GET_UPDATE:{
-      if (len != 0 || maxLen < 4)
+      if (len != 0 || maxLen < 2)
         return cmd_result(Status::INVALID_ARGUMENTS);
 			uint16_t returnValue = encoder.process() & 0xFF7F;
 			if (!(on < off && (off - on) > hopper_threshold))
