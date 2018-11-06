@@ -23,14 +23,14 @@
 
 const uint16_t hopper_threshold = 20;
 uint16_t measurement[2];
+ButtonEncoder encoder(ENC_SW, ENC_A, ENC_B);
 
 //#define ENABLE_SERIAL
 
 struct Commands {
   enum {
     GET_LAST_MEASUREMENT = 0x80,
-		GET_ENCODER_DELTA = 0x40,
-		GET_ENCODER_BUTTON = 0x41,
+		GET_UPDATE = 0x81,
   };
 };
 
@@ -44,6 +44,16 @@ cmd_result processCommand(uint8_t cmd, uint8_t * /*datain*/, uint8_t len, uint8_
       dataout[2] = measurement[1] >> 8;
       dataout[3] = measurement[1];
       return cmd_result(Status::COMMAND_OK, 4);
+		case Commands::GET_UPDATE:{
+      if (len != 0 || maxLen < 4)
+        return cmd_result(Status::INVALID_ARGUMENTS);
+			uint16_t returnValue = encoder.process() & 0xFF7F;
+			if (!(on < off && (off - on) > hopper_threshold))
+				returnValue |= 0x0080;
+			dataout[0] = returnValue >> 8;
+			dataout[1] = returnValue;
+			return cmd_result(Status::COMMAND_OK, 2);
+		}
     default:
       return cmd_result(Status::COMMAND_NOT_SUPPORTED);
   }
